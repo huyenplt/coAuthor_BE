@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Candidate extends Model
 {
-    protected $table = 'candidates';
-    protected $fillable = ['id', 'author_id1', 'author_id2', 'label'];
+    protected $table = 'candidates2';
+    protected $fillable = ['id', 'author_id1', 'author_id2'];
 }

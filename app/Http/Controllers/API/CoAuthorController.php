@@ -31,6 +31,11 @@ class CoAuthorController extends Controller
         return response()->json($coAuthors);
     }
 
+    // public function createCoAuthor() {
+    //     $coAuthors = $this->coAuthorService->getCoAuthorsFromPaperAuthors();
+    //     return response()->json($coAuthors);
+    // }
+
     public function importCoAuthor()
     {
         $coAuthors = $this->coAuthorService->importCoAuthors();
@@ -84,6 +89,48 @@ class CoAuthorController extends Controller
     public function calculateMeasures(Request $request) {
         $data = $request->json()->all();
         $result = $this->coAuthorService->calculateMeasures($data);
+        return response()->json($result);
+    }
+
+    public function calculateCN() {
+        $result = $this->coAuthorService->calculateCN();
+        return response()->json($result);
+    }
+
+    public function calculateAA() {
+        $result = $this->coAuthorService->calculateAA();
+        return response()->json($result);
+    }
+
+    public function calculateJC() {
+        $result = $this->coAuthorService->calculateJC();
+        return response()->json($result);
+    }
+
+    public function calculateRA() {
+        $result = $this->coAuthorService->calculateRA();
+        return response()->json($result);
+    }
+
+    public function test(Request $request) {
+        // $result = $this->coAuthorService->run_algo();
+        $measures = Candidate::select('measure1', 'measure2', 'measure3', 'measure4')->get()->toArray();
+        $Y = Candidate::pluck('label')->toArray();
+        $ids = Candidate::pluck('id')->toArray();
+        $X = array();
+        for($i = 0; $i < count($measures); $i++) {
+            foreach($measures[$i] as $measure) {
+                $X[$i][] = $measure;
+            }
+        }
+
+        $sSMC_FCMResult = $this->coAuthorService->sSMC_FCM($ids, $X, $Y, 2);
+        // $result = $this->coAuthorService->get_result_df([], $sSMC_FCMResult[0], [], []);
+        return response()->json($sSMC_FCMResult);
+    }
+
+    public function predict($id) {
+        $result = $this->coAuthorService->predict($id);
         return response()->json($result);
     }
 
