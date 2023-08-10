@@ -163,19 +163,16 @@ class CoAuthorService
             'author_id1',
             'author_id2',
         )
-            ->where('paper_year', '<', $split_year)
             ->distinct()
             ->get();
 
         $repeatedAuthor1 = CoAuthor1::select('author_id1')
-            ->where('paper_year', '<', $split_year)
             ->groupBy('author_id1')
             ->havingRaw('COUNT(author_id1) > 1')
             ->get();
 
         foreach ($repeatedAuthor1 as $item) {
             $author1ids = CoAuthor1::select('author_id2')
-                ->where('paper_year', '<', $split_year)
                 ->where('author_id1', $item->author_id1)
                 ->orderBy('author_id2', 'asc')
                 ->distinct()
